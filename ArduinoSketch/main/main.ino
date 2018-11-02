@@ -42,4 +42,20 @@ void loop() {
   desligarEletronicos();
 }
 
+void ligarEletronicos(){
+  digitalWrite( atuadorRele, HIGH );
+  irSend.sendNEC( comandoDeLigarArCondicionado, 32);
+}
+
+void desligarEletronicos(){
+  digitalWrite( atuadorRele, LOW );
+  irSend.sendNEC(comandoDeDesligarArCondicionado, 32);
+}
+
+void receberDados(){
+  statusSensorPIR = digitalRead( sensorPIR );
+  statusSensorTemperatura = analogRead( sensorTemperatura );
+  if(Serial.available() > 0){
+    serialReturn = Serial.readString();
+  }
 }
