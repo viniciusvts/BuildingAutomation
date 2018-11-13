@@ -82,7 +82,7 @@ void desligarEletronicos(){
 String receberDadosSerial(){
   if(Serial.available() > 0){
     serialReturn = Serial.readString();
-    return serialReturn
+    return serialReturn;
   }
     return "";
 }
