@@ -43,7 +43,8 @@ void loop() {
     // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
   if(isTempoEvento()){
     if(serialTratada.equals("STRING PARA LIGAR")){
-          if(isPresencaOn()){
+        receberDadosSensores();  
+        if(isPresencaOn()){
                 if(estadoAr == false){
                     ligarEletronicos();
                 }else if(estadoAr == true){
