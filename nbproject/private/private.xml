@@ -5,6 +5,7 @@
         <group>
             <file>file:/home/vinicius/workspace/BuildingAutomation/src/br/com/vtsantana/buildingautomation/view/Start.java</file>
             <file>file:/home/vinicius/workspace/BuildingAutomation/src/br/com/vtsantana/buildingautomation/control/ControlEvento.java</file>
+            <file>file:/home/vinicius/workspace/BuildingAutomation/src/br/com/vtsantana/buildingautomation/control/ControlDadosArduino.java</file>
         </group>
     </open-files>
 </project-private>
