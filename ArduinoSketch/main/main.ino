@@ -24,6 +24,8 @@ const String comandoStringParaDesligarTudo = "d";
 
 //setar variaveis de controle
 bool estadoAr = false; // Controle de estado do ar condicionado
+bool jaEnviouLigar = false;
+bool jaEnviouDesligar = false;
 String serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
@@ -46,7 +48,7 @@ void setup() {
 
 void loop() { 
     // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
-    if(serialReturn.equals(comandoStringParaLigarTudo)){
+    if(serialReturn.equals(comandoStringParaLigarTudo) || jaEnviouLigar){
         // ligarEletronicos(); // Verificar 
         if(isPresencaOn()){
             if(estadoAr == false){
@@ -55,13 +57,13 @@ void loop() {
                  if(millisAtual - millisAnterior >= intervalo5min){ 
                     if(statusSensorTemperatura > 23){
                       ligarEletronicos();
-                      millisAnterior = millisAtual; // Verificar temp de 5 em 5 minutos.
+                      millisAnterior = millisAtual; // Verificar temp em 5 minutos.
+                                                        
                     }
-                                       
-                }
+                  }
             }
         }
-    }else if(serialReturn.equals(comandoStringParaDesligarTudo)){
+    }else if(serialReturn.equals(comandoStringParaDesligarTudo) || jaEnviouDesligar){
         if(estadoAr == true){      
             desligarEletronicos();
         }else if(estadoAr == false){
@@ -82,12 +84,14 @@ void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
   irSend.sendNEC( comandoDeLigarArCondicionado, 32);
   estadoAr = true;
+  jaEnviouLigar = true;
 }
 
 void desligarEletronicos(){
   digitalWrite( atuadorRele, LOW );
   irSend.sendNEC(comandoDeDesligarArCondicionado, 32);
   estadoAr = false;
+  jaEnviouDesligar = true;
 }
 
 String receberDadosSerial(){
