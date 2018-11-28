@@ -18,14 +18,18 @@ IRsend irSend;
 //constantes utilizadas
 const unsigned long comandoDeLigarArCondicionado = 0x39C600FF; //exemplo: 0x39C600FF
 const unsigned long comandoDeDesligarArCondicionado;
+const String comandoStringParaLigarTudo = "l";
+const String comandoStringParaDesligarTudo = "d";
 
 
 //setar variaveis de controle
 bool estadoAr = false; // Controle de estado do ar condicionado
-String serialTratada;
 String serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
+unsigned int millisAnterior = 0;
+unsigned int millisAtual = millis(); // Duração de 50 dias
+const long intervalo5min = 300000;
 
 void setup() {
   Serial.begin(9600); //comunicação Serial
@@ -37,36 +41,42 @@ void setup() {
   //atuadores
   pinMode( atuadorRele, OUTPUT );
   pinMode( atuadorControleInfravermelho, OUTPUT );
+  receberTodosOsDadosExternos(); 
 }
 
 void loop() { 
     // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
-  if(isTempoEvento()){
-    if(serialTratada.equals("STRING PARA LIGAR")){
-        receberDadosSensores();  
+    if(serialReturn.equals(comandoStringParaLigarTudo)){
+        // ligarEletronicos(); // Verificar 
         if(isPresencaOn()){
-                if(estadoAr == false){
-                    ligarEletronicos();
-                }else if(estadoAr == true){
+            if(estadoAr == false){
+                ligarEletronicos();
+            }else if(estadoAr == true){
+                 if(millisAtual - millisAnterior >= intervalo5min){ 
                     if(statusSensorTemperatura > 23){
-                        delay(300000) // esperar 5 min #### Delay para o processamento da CPU verificar outra maneira de esperar.
-                    } // Testar se está gelando
-                    if(statusSensorTemperatura => 15 && statusSensorTemperatura <= 23){
-                        delay(10000) // Sensor vai ler temperatura de 10 em 10 Segundos.
+                      ligarEletronicos();
+                      millisAnterior = millisAtual; // Verificar temp de 5 em 5 minutos.
                     }
-
+                                       
                 }
-          }
-    }else if(serialTratada.equals("STRING PARA DESLIGAR")){
-                desligarEletronicos();
+            }
         }
-             
-  }
-}
-                     
-             
-  
-                     
+    }else if(serialReturn.equals(comandoStringParaDesligarTudo)){
+        if(estadoAr == true){      
+            desligarEletronicos();
+        }else if(estadoAr == false){
+            if(millisAtual - millisAnterior >= intervalo5min){ 
+                    if(statusSensorTemperatura < 23){
+                      desligarEletronicos();
+                      millisAnterior = millisAtual; // Verificar temp de 5 em 5 minutos.
+                    }
+                                       
+             }
+        }
+    }
+    receberTodosOsDadosExternos();
+    enviarDadosParaSerial();
+} // FIM LOOP
 
 void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
@@ -92,15 +102,9 @@ void receberDadosSensores(){
   statusSensorTemperatura = analogRead( sensorTemperatura );
 }
 
-bool isTempoEvento(){
-    serialTratada = receberDadosSerial();
-    if(serialTratada.equals("STRING PARA LIGAR")){
-        return true;
-    }else if(serialTratada.equals("STRING PARA DESLIGAR")){
-        return true;
-    }else{
-        return false;
-    }
+void receberTodosOsDadosExternos(){
+    receberDadosSensores();
+    receberDadosSerial();
 }
 
 bool isPresencaOn(){
@@ -109,4 +113,8 @@ bool isPresencaOn(){
     }
     return false;
 }
+
+void enviarDadosParaSerial(){
+    Serial.print(statusSensorPIR+"|"+statusSensorTemperatura);
+ }
 
