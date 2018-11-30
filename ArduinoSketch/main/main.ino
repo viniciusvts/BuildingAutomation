@@ -29,44 +29,43 @@ bool jaEnviouDesligar = false;
 String serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
+int statusSensorTemperaturaUltimoValorLido = 0;
 const unsigned long intervaloDeVerificaçãoDoArCondicionado = 300000;
 unsigned long millisUltimoValorLido;
 
 void setup() {
-  Serial.begin(9600); //comunicação Serial
+    Serial.begin(9600); //comunicação Serial
     millis(); // Duração de 50 dias
-  //sensores
-  pinMode( sensorPIR, INPUT );
-  //o sensorTemperatura é analogico
+    //sensores
+    pinMode( sensorPIR, INPUT );
+    //o sensorTemperatura é analogico
   
-  //atuadores
-  pinMode( atuadorRele, OUTPUT );
-  pinMode( atuadorControleInfravermelho, OUTPUT );
-  receberTodosOsDadosExternos(); 
+    //atuadores
+    pinMode( atuadorRele, OUTPUT );
+    pinMode( atuadorControleInfravermelho, OUTPUT );
+    receberTodosOsDadosExternos(); 
 }
 
 void loop() { 
     // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
     if(serialReturn.equals(comandoStringParaLigarTudo) || jaEnviouLigar){
         // ligarEletronicos(); // Verificar 
-        if(isPresencaOn()){
-            if(estadoAr == false){
-                ligarEletronicos();
-            }else if(estadoAr == true){
-                 if(millisAtual - millisAnterior >= intervalo5min){ 
-                    if(statusSensorTemperatura > 23){
-                      ligarEletronicos();
-                      millisAnterior = millisAtual; // Verificar temp em 5 minutos.
-                                                        
-                    }
-                  }
+        if(estadoAr == false){
+            ligarEletronicos();
+        }else if(estadoAr == true){
+            if(millisAtual - millisAnterior >= intervaloDeVerificaçãoDoArCondicionado){ 
+                if(statusSensorTemperatura > 23){
+                    ligarEletronicos();
+                    millisAnterior = millisAtual; // Verificar temp em 5 minutos.
+                }
             }
         }
+    }
     }else if(serialReturn.equals(comandoStringParaDesligarTudo) || jaEnviouDesligar){
         if(estadoAr == true){      
             desligarEletronicos();
         }else if(estadoAr == false){
-            if(millisAtual - millisAnterior >= intervalo5min){ 
+            if(millisAtual - millisAnterior >= intervaloDeVerificaçãoDoArCondicionado){ 
                     if(statusSensorTemperatura < 23){
                       desligarEletronicos();
                       millisAnterior = millisAtual; // Verificar temp de 5 em 5 minutos.
