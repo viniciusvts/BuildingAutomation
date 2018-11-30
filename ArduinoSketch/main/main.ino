@@ -30,70 +30,20 @@ String serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
 int statusSensorTemperaturaUltimoValorLido = 0;
-const unsigned long intervaloDeVerificaçãoDoArCondicionado = 300000;
+const unsigned long intervaloDeVerificacaoDoArCondicionado = 300000;
 unsigned long millisUltimoValorLido;
 
-void setup() {
-    Serial.begin(9600); //comunicação Serial
-    millis(); // Duração de 50 dias
-    //sensores
-    pinMode( sensorPIR, INPUT );
-    //o sensorTemperatura é analogico
-  
-    //atuadores
-    pinMode( atuadorRele, OUTPUT );
-    pinMode( atuadorControleInfravermelho, OUTPUT );
-    receberTodosOsDadosExternos(); 
-}
-
-void loop() { 
-    
-    receberTodosOsDadosExternos();
-    enviarDadosParaSerial();
-    
-    if(serialReturn.equals(comandoStringParaLigarTudo) || jaEnviouLigar){
-        // ligarEletronicos(); // Verificar 
-        if(estadoAr == false){
-            ligarEletronicos();
-            statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temp atual
-            millisUltimoValorLido = millis();
-        }else if( jaEnviouLigar ){
-            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificaçãoDoArCondicionado){ 
-                if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
-                    ligarEletronicos();
-                    millisUltimoValorLido  = millis(); // Verificar temp em 5 minutos.
-                }else{ //se reconheço  que REALMENTE ligou o ar
-                    jaEnviouLigar = false; //para não estrar mais na condicional
-                }
-            }
-        }
-    }
-    }else if(serialReturn.equals(comandoStringParaDesligarTudo) || jaEnviouDesligar){
-        if(estadoAr == true){      
-            desligarEletronicos();
-        }else if(estadoAr == false){
-            if(millis() - millisUltimoValorLido  >= intervaloDeVerificaçãoDoArCondicionado){ 
-                    if(statusSensorTemperatura < 23){
-                      desligarEletronicos();
-                      millisUltimoValorLido  = millis(); // Verificar temp de 5 em 5 minutos.
-                    }
-                                       
-             }
-        }
-    }
-} // FIM LOOP
+//funcões utilizadas no programa
 
 void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
   irSend.sendNEC( comandoDeLigarArCondicionado, 32);
-  estadoAr = true;
   jaEnviouLigar = true;
 }
 
 void desligarEletronicos(){
   digitalWrite( atuadorRele, LOW );
   irSend.sendNEC(comandoDeDesligarArCondicionado, 32);
-  estadoAr = false;
   jaEnviouDesligar = true;
 }
 
@@ -125,3 +75,66 @@ void enviarDadosParaSerial(){
     Serial.print(statusSensorPIR+"|"+statusSensorTemperatura);
  }
 
+//FIM DAS FUNÇÔES
+////////////////////////////////////////////////////////////////////////////////////
+
+void setup() {
+    Serial.begin(9600); //comunicação Serial
+    millis(); // Duração de 50 dias
+    //sensores
+    pinMode( sensorPIR, INPUT );
+    //o sensorTemperatura é analogico
+  
+    //atuadores
+    pinMode( atuadorRele, OUTPUT );
+    pinMode( atuadorControleInfravermelho, OUTPUT );
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+void loop() { 
+    
+    receberTodosOsDadosExternos();
+    enviarDadosParaSerial();
+    
+    if( serialReturn.equals(comandoStringParaLigarTudo) ){
+        // ligarEletronicos(); // Verificar 
+        if(estadoAr == false){
+            ligarEletronicos(); //liga a flag "jaEnviouLigar"
+            statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
+            millisUltimoValorLido = millis();
+        }
+        if( jaEnviouLigar ){
+            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){ 
+                // se não ligou mando o comando de novo
+                if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
+                    ligarEletronicos();
+                    millisUltimoValorLido  = millis(); // Verificar temp em 5 minutos.
+                // se ligou desativo as flags
+                }else{
+                    jaEnviouLigar = false; //para não entrar mais na condicional
+                    estadoAr = true; //REALMENTE ligou o ar
+                }
+            }
+        }
+    }else if( serialReturn.equals(comandoStringParaDesligarTudo) ){
+        if(estadoAr){      
+            desligarEletronicos(); //liga a flag "jaEnviouDesligar"
+            statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
+            millisUltimoValorLido = millis();
+        }
+        if( jaEnviouDesligar ){
+            if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){ 
+                //se não desligou mando o comando de novo
+                if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
+                    desligarEletronicos();
+                    millisUltimoValorLido  = millis(); // Verificar temp de 5 em 5 minutos.
+                    // se desligou desativo as flags
+                }else{
+                    jaEnviouDesligar = false; //para não entrar mais na condicional
+                    estado do ar = false //REALMENTE desligou
+                }
+            }
+        }
+    }
+} // FIM LOOP
