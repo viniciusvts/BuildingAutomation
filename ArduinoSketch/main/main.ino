@@ -55,11 +55,15 @@ void loop() {
         // ligarEletronicos(); // Verificar 
         if(estadoAr == false){
             ligarEletronicos();
-        }else if(estadoAr == true){
-            if(millisAtual - millisAnterior >= intervaloDeVerificaçãoDoArCondicionado){ 
-                if(statusSensorTemperatura > 23){
+            statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temp atual
+            millisUltimoValorLido = millis();
+        }else if( jaEnviouLigar ){
+            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificaçãoDoArCondicionado){ 
+                if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
                     ligarEletronicos();
-                    millisAnterior = millisAtual; // Verificar temp em 5 minutos.
+                    millisUltimoValorLido  = millis(); // Verificar temp em 5 minutos.
+                }else{ //se reconheço  que REALMENTE ligou o ar
+                    jaEnviouLigar = false; //para não estrar mais na condicional
                 }
             }
         }
@@ -68,10 +72,10 @@ void loop() {
         if(estadoAr == true){      
             desligarEletronicos();
         }else if(estadoAr == false){
-            if(millisAtual - millisAnterior >= intervaloDeVerificaçãoDoArCondicionado){ 
+            if(millis() - millisUltimoValorLido  >= intervaloDeVerificaçãoDoArCondicionado){ 
                     if(statusSensorTemperatura < 23){
                       desligarEletronicos();
-                      millisAnterior = millisAtual; // Verificar temp de 5 em 5 minutos.
+                      millisUltimoValorLido  = millis(); // Verificar temp de 5 em 5 minutos.
                     }
                                        
              }
