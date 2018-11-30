@@ -48,39 +48,6 @@ void setup() {
 
 void loop() { 
     // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
-<<<<<<< HEAD
- if(isTempoEvento()){
-    if(serialTratada.equals("STRING PARA LIGAR")){
-          if(isPresencaOn()){
-                if(estadoAr == false){
-                    ligarEletronicos();
-                }else if(estadoAr == true){
-                    if(statusSensorTemperatura > 23){
-                        delay(300000); // esperar 5 min #### Delay para o processamento da CPU verificar outra maneira de esperar.
-                    } // Testar se está gelando
-                    if(statusSensorTemperatura > 14 && statusSensorTemperatura < 24){
-                        delay(10000); // Sensor vai ler temperatura de 10 em 10 Segundos.
-                    }
-
-                }
-          }
-    }else if(serialTratada.equals("STRING PARA DESLIGAR")){
-          if(estadoAr == true){      
-              desligarEletronicos();
-              
-          }else if(estadoAr == false){
-              if(statusSensorTemperatura > 23){
-                delay(300000);                
-              }
-              if(statusSensorTemperatura > 14 && statusSensorTemperatura <24){
-                delay(300000);
-              }
-          }
-             
-    }
-  }
-}                    
-=======
     if(serialReturn.equals(comandoStringParaLigarTudo) || jaEnviouLigar){
         // ligarEletronicos(); // Verificar 
         if(isPresencaOn()){
@@ -112,7 +79,6 @@ void loop() {
     receberTodosOsDadosExternos();
     enviarDadosParaSerial();
 } // FIM LOOP
->>>>>>> luiz/master
 
 void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
