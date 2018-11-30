@@ -29,13 +29,12 @@ bool jaEnviouDesligar = false;
 String serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
-unsigned int millisAnterior = 0;
-unsigned int millisAtual = millis(); // Duração de 50 dias
-const long intervalo5min = 300000;
+const unsigned long intervaloDeVerificaçãoDoArCondicionado = 300000;
+unsigned long millisUltimoValorLido;
 
 void setup() {
   Serial.begin(9600); //comunicação Serial
-
+    millis(); // Duração de 50 dias
   //sensores
   pinMode( sensorPIR, INPUT );
   //o sensorTemperatura é analogico
