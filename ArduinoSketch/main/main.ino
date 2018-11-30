@@ -47,7 +47,10 @@ void setup() {
 }
 
 void loop() { 
-    // Premissa maxima para evento. Os eventos so poderão acontecer no horário 
+    
+    receberTodosOsDadosExternos();
+    enviarDadosParaSerial();
+    
     if(serialReturn.equals(comandoStringParaLigarTudo) || jaEnviouLigar){
         // ligarEletronicos(); // Verificar 
         if(estadoAr == false){
@@ -74,8 +77,6 @@ void loop() {
              }
         }
     }
-    receberTodosOsDadosExternos();
-    enviarDadosParaSerial();
 } // FIM LOOP
 
 void ligarEletronicos(){
