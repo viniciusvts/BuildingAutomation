@@ -132,7 +132,7 @@ void loop() {
                     // se desligou desativo as flags
                 }else{
                     jaEnviouDesligar = false; //para não entrar mais na condicional
-                    estado do ar = false //REALMENTE desligou
+                    estadoAr = false //REALMENTE desligou
                 }
             }
         }
