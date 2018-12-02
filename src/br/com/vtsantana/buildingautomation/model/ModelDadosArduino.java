@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.vtsantana.buildingautomation.control;
+package br.com.vtsantana.buildingautomation.model;
 
 /**
  *
  * @author vinicius
  */
-public class ControlDadosArduino {
+public class ModelDadosArduino {
     private int temperatura;
     private boolean presenca;
     
-    public ControlDadosArduino(){}
-    public ControlDadosArduino(int temperatura, boolean presenca) {
+    public ModelDadosArduino(){}
+    public ModelDadosArduino(int temperatura, boolean presenca) {
         this.temperatura = temperatura;
         this.presenca = presenca;
     }
