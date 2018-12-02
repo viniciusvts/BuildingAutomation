@@ -101,7 +101,8 @@ void loop() {
     enviarDadosParaSerial();
     
     if( serialReturn.equals(comandoStringParaLigarTudo) ){
-        // ligarEletronicos(); // Verificar 
+        //se no loop anterior recebi comandoStringParaDesligarTudo
+        jaEnviouDesligar = false;
         if(estadoAr == false){
             ligarEletronicos(); //liga a flag "jaEnviouLigar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
@@ -123,7 +124,9 @@ void loop() {
             }
         }
     }else if( serialReturn.equals(comandoStringParaDesligarTudo) ){
-        if(estadoAr){      
+        //se no loop anterior recebi comandoStringParaLigarTudo
+        jaEnviouLigar = false;
+        if(estadoAr){
             desligarEletronicos(); //liga a flag "jaEnviouDesligar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
             millisUltimoValorLido = millis();
