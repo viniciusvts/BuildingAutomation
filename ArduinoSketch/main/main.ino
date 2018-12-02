@@ -87,7 +87,7 @@ void setup() {
     //sensores
     pinMode( sensorPIR, INPUT );
     //o sensorTemperatura é analogico
-  
+
     //atuadores
     pinMode( atuadorRele, OUTPUT );
     pinMode( atuadorControleInfravermelho, OUTPUT );
@@ -95,11 +95,11 @@ void setup() {
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void loop() { 
-    
+void loop() {
+
     receberTodosOsDadosExternos();
     enviarDadosParaSerial();
-    
+
     if( serialReturn.equals(comandoStringParaLigarTudo) ){
         //se no loop anterior recebi comandoStringParaDesligarTudo
         jaEnviouDesligar = false;
@@ -111,7 +111,7 @@ void loop() {
             digitalWrite( atuadorRele, HIGH);
         }
         if( jaEnviouLigar ){
-            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){ 
+            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){
                 // se não ligou mando o comando de novo
                 if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
                     ligarEletronicos();
@@ -134,7 +134,7 @@ void loop() {
             digitalWrite( atuadorRele, LOW);
         }
         if( jaEnviouDesligar ){
-            if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){ 
+            if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
                 //se não desligou mando o comando de novo
                 if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
                     desligarEletronicos();
@@ -142,7 +142,7 @@ void loop() {
                     // se desligou desativo as flags
                 }else{
                     jaEnviouDesligar = false; //para não entrar mais na condicional
-                    estadoAr = false //REALMENTE desligou
+                    estadoAr = false; //REALMENTE desligou
                 }
             }
         }
