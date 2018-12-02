@@ -106,6 +106,8 @@ void loop() {
             ligarEletronicos(); //liga a flag "jaEnviouLigar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
             millisUltimoValorLido = millis();
+        }else{
+            digitalWrite( atuadorRele, HIGH);
         }
         if( jaEnviouLigar ){
             if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){ 
@@ -125,6 +127,8 @@ void loop() {
             desligarEletronicos(); //liga a flag "jaEnviouDesligar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
             millisUltimoValorLido = millis();
+        }else{
+            digitalWrite( atuadorRele, LOW);
         }
         if( jaEnviouDesligar ){
             if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){ 
