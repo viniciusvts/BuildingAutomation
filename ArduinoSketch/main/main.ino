@@ -17,7 +17,7 @@ IRsend irSend;
 
 //constantes utilizadas
 const unsigned long comandoDeLigarArCondicionado = 0x39C600FF; //exemplo: 0x39C600FF
-const unsigned long comandoDeDesligarArCondicionado;
+const unsigned long comandoDeDesligarArCondicionado = 0x39C600FF;
 const String comandoStringParaLigarTudo = "l";
 const String comandoStringParaDesligarTudo = "d";
 
