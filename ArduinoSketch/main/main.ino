@@ -56,7 +56,8 @@ String receberDadosSerial(){
 }
 void receberDadosSensores(){
   statusSensorPIR = digitalRead( sensorPIR );
-  statusSensorTemperatura = analogRead( sensorTemperatura );
+  // Temperatura =  [(Valor lido em A0)*(5/1023)]/10mV - https://portal.vidadesilicio.com.br/lm35-medindo-temperatura-com-arduino/
+  statusSensorTemperatura = ( float(analogRead(sensorTemperatura) ) * 5 / (1023) ) / 0.01;
 }
 
 void receberTodosOsDadosExternos(){
