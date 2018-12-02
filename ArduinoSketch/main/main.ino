@@ -8,7 +8,7 @@
 
 //setar os sensores
 const int sensorPIR = 3;
-const int sensorTemperatura = 4;
+const int sensorTemperatura = A4;
 
 //setar os atuadores
 const int atuadorRele = 6;
