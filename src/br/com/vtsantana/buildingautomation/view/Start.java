@@ -5,16 +5,26 @@
  */
 package br.com.vtsantana.buildingautomation.view;
 
+import br.com.vtsantana.buildingautomation.control.ControlConnArduino;
+import br.com.vtsantana.buildingautomation.model.ModelDadosArduino;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jssc.SerialPortException;
+
 /**
  *
  * @author vinicius
  */
 public class Start extends javax.swing.JFrame {
 
+    ControlConnArduino connArduino;
+    
     /**
      * Creates new form Start
+     * @throws jssc.SerialPortException
      */
-    public Start() {
+    public Start() throws SerialPortException {
+        this.connArduino = new ControlConnArduino();
         initComponents();
     }
 
@@ -41,6 +51,7 @@ public class Start extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,6 +79,11 @@ public class Start extends javax.swing.JFrame {
         });
 
         jButton2.setText("Desligar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data início evento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12))); // NOI18N
 
@@ -184,7 +200,11 @@ public class Start extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            connArduino.enviarDesligarParaArduino();
+        } catch (SerialPortException ex) {
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -198,6 +218,14 @@ public class Start extends javax.swing.JFrame {
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            connArduino.enviarDesligarParaArduino();
+        } catch (SerialPortException ex) {
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,8 +256,13 @@ public class Start extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new Start().setVisible(true);
+                try {
+                    new Start().setVisible(true);
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
