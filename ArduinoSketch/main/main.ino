@@ -31,7 +31,9 @@ int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
 int statusSensorTemperaturaUltimoValorLido = 0;
 const unsigned long intervaloDeVerificacaoDoArCondicionado = 300000;
-unsigned long millisUltimoValorLido;
+const unsigned long intervaloDeEnvioDeDadosArduino = 500;
+unsigned long millisUltimoValorLido = 0;
+unsigned long millisUltimoValorLidoDoEnvioDeDados = 0;
 
 //funcões utilizadas no programa
 
@@ -98,7 +100,10 @@ void setup() {
 void loop() {
 
     receberTodosOsDadosExternos();
-    enviarDadosParaSerial();
+    if ( ( millis() - millisUltimoValorLidoDoEnvioDeDados ) >= intervaloDeEnvioDeDadosArduino ){
+        enviarDadosParaSerial();
+        millisUltimoValorLidoDoEnvioDeDados = millis();
+    }
 
     if( serialReturn.equals(comandoStringParaLigarTudo) ){
         //se no loop anterior recebi comandoStringParaDesligarTudo
