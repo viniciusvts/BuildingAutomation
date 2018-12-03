@@ -232,7 +232,7 @@ public class Start extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         ModelDadosArduino modelDadArdui = new ModelDadosArduino();
         try {
-            modelDadArdui = this.connArduino.getDadosArduino();
+          this.connArduino.getDadosArduino();
         } catch (SerialPortException ex) {
         }
         jLabel4.setText( String.valueOf( modelDadArdui.getTemperatura() ) );
