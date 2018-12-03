@@ -90,4 +90,12 @@ public class ControlConnArduino {
             ModelDadosArduino model = new ModelDadosArduino(intTemp, boolPresenca);
             return model;
     }
+    
+    public void enviarLigarParaArduino() throws SerialPortException{
+        this.digitalWrite("l");
+    }
+    
+    public void enviarDesligarParaArduino() throws SerialPortException{
+        this.digitalWrite("d");
+    }
 }
