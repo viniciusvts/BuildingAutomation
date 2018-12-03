@@ -77,8 +77,8 @@ bool isPresencaOn(){
 
 void enviarDadosParaSerial(){
     Serial.print(statusSensorPIR);
-    Serial.print("|");
-    Serial.println(statusSensorTemperatura);
+    Serial.print("&");
+    Serial.print(statusSensorTemperatura);
  }
 
 //FIM DAS FUNÇÔES
