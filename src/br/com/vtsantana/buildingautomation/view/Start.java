@@ -211,7 +211,7 @@ public class Start extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            connArduino.enviarDesligarParaArduino();
+            connArduino.enviarLigarParaArduino();
         } catch (SerialPortException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
         }
