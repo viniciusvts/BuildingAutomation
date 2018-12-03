@@ -20,6 +20,7 @@ const unsigned long comandoDeLigarArCondicionado = 0x39C600FF; //exemplo: 0x39C6
 const unsigned long comandoDeDesligarArCondicionado = 0x39C600FF;
 const String comandoStringParaLigarTudo = "l";
 const String comandoStringParaDesligarTudo = "d";
+const String comandoStringParaEnviarDados = "r";
 
 
 //setar variaveis de controle
@@ -100,9 +101,9 @@ void setup() {
 void loop() {
 
     receberTodosOsDadosExternos();
-    if ( ( millis() - millisUltimoValorLidoDoEnvioDeDados ) >= intervaloDeEnvioDeDadosArduino ){
+    if ( serialReturn.equals(comandoStringParaEnviarDados) ){
         enviarDadosParaSerial();
-        millisUltimoValorLidoDoEnvioDeDados = millis();
+        serialReturn = "";
     }
 
     if( serialReturn.equals(comandoStringParaLigarTudo) ){
