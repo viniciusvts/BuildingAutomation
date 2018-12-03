@@ -6,7 +6,10 @@
 package br.com.vtsantana.buildingautomation.testes;
 
 import br.com.vtsantana.buildingautomation.control.ControlConnArduino;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jssc.SerialPortException;
+import jssc.SerialPortTimeoutException;
 
 /**
  *
@@ -33,7 +36,11 @@ public class Main {
             } catch (InterruptedException e) {
             }
             
-            retornoSerial = con.digitalRead();
+            try {
+                retornoSerial = con.digitalRead();
+            } catch (SerialPortTimeoutException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
             System.out.println(retornoSerial);
             
             try {

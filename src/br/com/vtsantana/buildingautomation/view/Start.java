@@ -26,6 +26,7 @@ public class Start extends javax.swing.JFrame {
     public Start() throws SerialPortException {
         this.connArduino = new ControlConnArduino();
         initComponents();
+        System.out.println("Start");
     }
 
     /**
@@ -231,12 +232,13 @@ public class Start extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         ModelDadosArduino modelDadArdui = new ModelDadosArduino();
-        try {
-            modelDadArdui = this.connArduino.getDadosArduino();
-        } catch (SerialPortException ex) {
+        modelDadArdui = this.connArduino.getDadosArduino();
+        if( modelDadArdui == null ){
+            System.out.println( " classe nula" );
+        } else {
+            jLabel4.setText( String.valueOf( modelDadArdui.getTemperatura() ) );
+            jLabel5.setText( String.valueOf( modelDadArdui.isPresenca() ) );
         }
-        jLabel4.setText( String.valueOf( modelDadArdui.getTemperatura() ) );
-        jLabel5.setText( String.valueOf( modelDadArdui.isPresenca() ) );
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

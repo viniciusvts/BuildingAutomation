@@ -1,8 +1,11 @@
 package br.com.vtsantana.buildingautomation.control;
 
 import br.com.vtsantana.buildingautomation.model.ModelDadosArduino;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import jssc.SerialPortTimeoutException;
 
 /**
  *
@@ -39,9 +42,11 @@ public class ControlConnArduino {
      * Método recebe dados pela porta serial
      * @return String
      * @throws SerialPortException 
+     * @throws jssc.SerialPortTimeoutException 
      */
-    public String digitalRead() throws SerialPortException{
-        String string = serialPort.readString();
+    public String digitalRead() throws SerialPortException, SerialPortTimeoutException{
+        this.digitalWrite("r");
+        String string = serialPort.readString(4, 500);
         return string;
     }
     
@@ -50,7 +55,7 @@ public class ControlConnArduino {
      * @return ModelDadosArduino
      * @throws SerialPortException 
      */
-    public ModelDadosArduino getDadosArduino() throws SerialPortException{
+    public ModelDadosArduino getDadosArduino(){
         String str; //onde colocarei o dados vindo do s
         String strPresenca; // onde colocarei a informação 1
         String strTemp; // onde colocarei a informação 2
@@ -58,12 +63,18 @@ public class ControlConnArduino {
         // as informações estão em String, transformarei em respectivos bool e inteiro
         boolean boolPresenca;
         int intTemp;
-        
-        str = digitalRead(); //leio a informação
+        try {
+            str = digitalRead(); //leio a informação
+        } catch (SerialPortException ex) {
+            return null;
+        } catch (SerialPortTimeoutException ex) {
+            return null;
+        }
         /* A informação vem da seguinte forma:
         1|30
         onde 1 ou 0 é presença e 30 é a temperatura que virá*/
-        String[] dados = str.split("|"); // quebro a string que virá
+        String[] dados = str.split("&"); // quebro a string que virá
+        
         if (dados.length == 2){ // se qubrou em duas está correto, se não retorna null
             strPresenca = dados[0];
             strTemp = dados[1];
