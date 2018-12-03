@@ -109,6 +109,7 @@ void loop() {
     if( serialReturn.equals(comandoStringParaLigarTudo) ){
         //se no loop anterior recebi comandoStringParaDesligarTudo
         jaEnviouDesligar = false;
+        serialReturn = "";
         if(estadoAr == false){
             ligarEletronicos(); //liga a flag "jaEnviouLigar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
@@ -116,22 +117,10 @@ void loop() {
         }else{
             digitalWrite( atuadorRele, HIGH);
         }
-        if( jaEnviouLigar ){
-            if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){
-                // se não ligou mando o comando de novo
-                if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
-                    ligarEletronicos();
-                    millisUltimoValorLido  = millis(); // Verificar temp em 5 minutos.
-                // se ligou desativo as flags
-                }else{
-                    jaEnviouLigar = false; //para não entrar mais na condicional
-                    estadoAr = true; //REALMENTE ligou o ar
-                }
-            }
-        }
     }else if( serialReturn.equals(comandoStringParaDesligarTudo) ){
         //se no loop anterior recebi comandoStringParaLigarTudo
         jaEnviouLigar = false;
+        serialReturn = "";
         if(estadoAr){
             desligarEletronicos(); //liga a flag "jaEnviouDesligar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
@@ -139,17 +128,30 @@ void loop() {
         }else{
             digitalWrite( atuadorRele, LOW);
         }
-        if( jaEnviouDesligar ){
-            if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
-                //se não desligou mando o comando de novo
-                if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
-                    desligarEletronicos();
-                    millisUltimoValorLido  = millis(); // Verificar temp de 5 em 5 minutos.
-                    // se desligou desativo as flags
-                }else{
-                    jaEnviouDesligar = false; //para não entrar mais na condicional
-                    estadoAr = false; //REALMENTE desligou
-                }
+    }
+    if( jaEnviouLigar ){
+        if( ( millis() - millisUltimoValorLido ) >= intervaloDeVerificacaoDoArCondicionado){
+            // se não ligou mando o comando de novo
+            if(statusSensorTemperatura >= statusSensorTemperaturaUltimoValorLido){
+                ligarEletronicos();
+                millisUltimoValorLido  = millis(); // Verificar temp em 5 minutos.
+                // se ligou desativo as flags
+            }else{
+                jaEnviouLigar = false; //para não entrar mais na condicional
+                estadoAr = true; //REALMENTE ligou o ar
+            }
+        }
+    }
+    if( jaEnviouDesligar ){
+        if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
+            //se não desligou mando o comando de novo
+            if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
+                desligarEletronicos();
+                millisUltimoValorLido  = millis(); // Verificar temp de 5 em 5 minutos.
+                // se desligou desativo as flags
+            }else{
+                jaEnviouDesligar = false; //para não entrar mais na condicional
+                estadoAr = false; //REALMENTE desligou
             }
         }
     }
