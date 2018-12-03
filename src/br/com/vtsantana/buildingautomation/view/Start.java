@@ -275,14 +275,11 @@ public class Start extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new Start().setVisible(true);
-                } catch (SerialPortException ex) {
-                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new Start().setVisible(true);
+            } catch (SerialPortException ex) {
+                Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
