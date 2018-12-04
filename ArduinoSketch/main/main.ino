@@ -16,8 +16,9 @@ const int atuadorControleInfravermelho = 4;//porta padrao do IRsend
 IRsend irSend;
 
 //constantes utilizadas
-const unsigned long comandoDeLigarArCondicionado = 0x39C600FF; //exemplo: 0x39C600FF
-const unsigned long comandoDeDesligarArCondicionado = 0x39C600FF;
+const unsigned long comandoDeLigarArCondicionado = 0xBD08F7; //abaixar volume
+const unsigned long comandoDeDesligarArCondicionado = 0xBD30CF;//aumentar volume
+const int bitsComandoIR = 32; // valor em bits do comando infravermelho
 const char comandocharParaLigarTudo = 'l';
 const char comandocharParaDesligarTudo = 'd';
 const char comandocharParaEnviarDados = 'r';
@@ -38,13 +39,13 @@ unsigned long millisUltimoValorLido = 0;
 
 void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
-  irSend.sendNEC( comandoDeLigarArCondicionado, 32);
+  irSend.sendRC5( comandoDeLigarArCondicionado, bitsComandoIR);
   jaEnviouLigar = true;
 }
 
 void desligarEletronicos(){
   digitalWrite( atuadorRele, LOW );
-  irSend.sendNEC(comandoDeDesligarArCondicionado, 32);
+  irSend.sendRC5(comandoDeDesligarArCondicionado, bitsComandoIR);
   jaEnviouDesligar = true;
 }
 
