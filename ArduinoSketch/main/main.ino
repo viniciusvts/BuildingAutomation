@@ -7,7 +7,7 @@
 #include "IRremote.h" //biblioteca do controle remoto
 
 //setar os sensores
-const int sensorPIR = 3;
+const int sensorPIR = 7;
 const int sensorTemperatura = A4;
 
 //setar os atuadores
@@ -120,8 +120,15 @@ void loop() {
     }else if( serialReturn == comandocharParaDesligarTudo ){
         //se no loop anterior recebi comandocharParaLigarTudo
         jaEnviouLigar = false;
-        serialReturn = "";
-        if(estadoAr){
+        serialReturn = 0;
+        if( isPresencaOn() ){
+            //não faz nada
+            jaEnviouDesligar = true; // para entrar na condicional
+            /* se tem alguem presente, nao vai atuar em nada mas,
+            precisa ter parametro de temperatura para qundo entrar na condicional
+            da flag jaEnviouDesligar, se não tiver esse parametro, nunca vai desligar*/
+            statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; 
+        } else if(estadoAr){
             desligarEletronicos(); //liga a flag "jaEnviouDesligar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
             millisUltimoValorLido = millis();
@@ -142,7 +149,9 @@ void loop() {
             }
         }
     }else if( jaEnviouDesligar ){
-        if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
+        if( isPresencaOn() ){
+            // não faz nada
+        } else if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
             //se não desligou mando o comando de novo
             if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
                 desligarEletronicos();
@@ -152,6 +161,8 @@ void loop() {
                 jaEnviouDesligar = false; //para não entrar mais na condicional
                 estadoAr = false; //REALMENTE desligou
             }
+        } else{
+            digitalWrite( atuadorRele, LOW);
         }
     }
 } // FIM LOOP
