@@ -31,10 +31,8 @@ char serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
 int statusSensorTemperaturaUltimoValorLido = 0;
-const unsigned long intervaloDeVerificacaoDoArCondicionado = 300000;
-const unsigned long intervaloDeEnvioDeDadosArduino = 500;
+const unsigned long intervaloDeVerificacaoDoArCondicionado = 60000;
 unsigned long millisUltimoValorLido = 0;
-unsigned long millisUltimoValorLidoDoEnvioDeDados = 0;
 
 //funcões utilizadas no programa
 
