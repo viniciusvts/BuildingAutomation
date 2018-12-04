@@ -18,16 +18,16 @@ IRsend irSend;
 //constantes utilizadas
 const unsigned long comandoDeLigarArCondicionado = 0x39C600FF; //exemplo: 0x39C600FF
 const unsigned long comandoDeDesligarArCondicionado = 0x39C600FF;
-const String comandoStringParaLigarTudo = "l";
-const String comandoStringParaDesligarTudo = "d";
-const String comandoStringParaEnviarDados = "r";
+const char comandocharParaLigarTudo = 'l';
+const char comandocharParaDesligarTudo = 'd';
+const char comandocharParaEnviarDados = 'r';
 
 
 //setar variaveis de controle
 bool estadoAr = false; // Controle de estado do ar condicionado
 bool jaEnviouLigar = false;
 bool jaEnviouDesligar = false;
-String serialReturn;
+char serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
 int statusSensorTemperaturaUltimoValorLido = 0;
@@ -50,12 +50,12 @@ void desligarEletronicos(){
   jaEnviouDesligar = true;
 }
 
-String receberDadosSerial(){
+char receberDadosSerial(){
   if(Serial.available() > 0){
-    serialReturn = Serial.readString();
+    serialReturn = Serial.read();
     return serialReturn;
   }
-    return "";
+    return 0;
 }
 void receberDadosSensores(){
   statusSensorPIR = digitalRead( sensorPIR );
@@ -101,15 +101,15 @@ void setup() {
 void loop() {
 
     receberTodosOsDadosExternos();
-    if ( serialReturn.equals(comandoStringParaEnviarDados) ){
-        enviarDadosParaSerial();
-        serialReturn = "";
-    }
 
-    if( serialReturn.equals(comandoStringParaLigarTudo) ){
-        //se no loop anterior recebi comandoStringParaDesligarTudo
+    // verifica qual comando de char foi recebida
+    if ( serialReturn == comandocharParaEnviarDados ){
+        enviarDadosParaSerial();
+        serialReturn = 0;
+    }else if( serialReturn == comandocharParaLigarTudo ){
+        //se no loop anterior recebi comandocharParaDesligarTudo
         jaEnviouDesligar = false;
-        serialReturn = "";
+        serialReturn = 0;
         if(estadoAr == false){
             ligarEletronicos(); //liga a flag "jaEnviouLigar"
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
@@ -117,8 +117,8 @@ void loop() {
         }else{
             digitalWrite( atuadorRele, HIGH);
         }
-    }else if( serialReturn.equals(comandoStringParaDesligarTudo) ){
-        //se no loop anterior recebi comandoStringParaLigarTudo
+    }else if( serialReturn == comandocharParaDesligarTudo ){
+        //se no loop anterior recebi comandocharParaLigarTudo
         jaEnviouLigar = false;
         serialReturn = "";
         if(estadoAr){
@@ -141,8 +141,7 @@ void loop() {
                 estadoAr = true; //REALMENTE ligou o ar
             }
         }
-    }
-    if( jaEnviouDesligar ){
+    }else if( jaEnviouDesligar ){
         if( ( millis() - millisUltimoValorLido)  >= intervaloDeVerificacaoDoArCondicionado){
             //se não desligou mando o comando de novo
             if(statusSensorTemperatura <= statusSensorTemperaturaUltimoValorLido){
