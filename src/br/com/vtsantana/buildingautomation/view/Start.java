@@ -46,7 +46,7 @@ public final class Start extends javax.swing.JFrame {
                 }
             }
         };
-        new Timer(1500, classeCabulosaQueVaiResolverMeuProblema).start();
+        new Timer(1000, classeCabulosaQueVaiResolverMeuProblema).start();
         //====================================================================    
         System.out.println("Start");
     }
