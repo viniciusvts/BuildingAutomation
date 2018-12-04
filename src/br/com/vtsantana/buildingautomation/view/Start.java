@@ -7,15 +7,18 @@ package br.com.vtsantana.buildingautomation.view;
 
 import br.com.vtsantana.buildingautomation.control.ControlConnArduino;
 import br.com.vtsantana.buildingautomation.model.ModelDadosArduino;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 import jssc.SerialPortException;
 
 /**
  *
  * @author vinicius
  */
-public class Start extends javax.swing.JFrame {
+public final class Start extends javax.swing.JFrame {
 
     ControlConnArduino connArduino;
     
@@ -26,8 +29,29 @@ public class Start extends javax.swing.JFrame {
     public Start() throws SerialPortException {
         this.connArduino = new ControlConnArduino();
         initComponents();
+        //====================================================================
+        ActionListener classeCabulosaQueVaiResolverMeuProblema = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ModelDadosArduino modelDadArdui = new ModelDadosArduino();
+                
+                modelDadArdui = connArduino.getDadosArduino();
+                
+                if (modelDadArdui == null) {
+                    System.out.println("classe nula");
+                } else {
+                    jLabel4.setText(String.valueOf(modelDadArdui.getTemperatura()));
+                    jLabel5.setText(String.valueOf(modelDadArdui.isPresenca()));
+                }
+            }
+        };
+        new Timer(1500, classeCabulosaQueVaiResolverMeuProblema).start();
+        //====================================================================    
         System.out.println("Start");
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

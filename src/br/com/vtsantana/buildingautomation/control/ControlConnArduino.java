@@ -46,7 +46,7 @@ public class ControlConnArduino {
      */
     public String digitalRead() throws SerialPortException, SerialPortTimeoutException{
         this.digitalWrite("r");
-        String string = serialPort.readString(4, 500);
+        String string = serialPort.readString(4, 300);
         return string;
     }
     
