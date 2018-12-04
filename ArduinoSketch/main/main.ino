@@ -12,7 +12,7 @@ const int sensorTemperatura = A4;
 
 //setar os atuadores
 const int atuadorRele = 6;
-const int atuadorControleInfravermelho = 7;
+const int atuadorControleInfravermelho = 4;//porta padrao do IRsend
 IRsend irSend;
 
 //constantes utilizadas
