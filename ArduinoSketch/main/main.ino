@@ -39,13 +39,19 @@ unsigned long millisUltimoValorLido = 0;
 
 void ligarEletronicos(){
   digitalWrite( atuadorRele, HIGH );
-  irSend.sendRC5( comandoDeLigarArCondicionado, bitsComandoIR);
+  for( int i =0 ; i <3 ; i++){
+    irSend.sendRC5( comandoDeLigarArCondicionado, bitsComandoIR);
+    delay(50);
+  }
   jaEnviouLigar = true;
 }
 
 void desligarEletronicos(){
   digitalWrite( atuadorRele, LOW );
-  irSend.sendRC5(comandoDeDesligarArCondicionado, bitsComandoIR);
+  for( int i =0 ; i <3 ; i++){
+    irSend.sendRC5(comandoDeDesligarArCondicionado, bitsComandoIR);
+    delay(50);
+  }
   jaEnviouDesligar = true;
 }
 
