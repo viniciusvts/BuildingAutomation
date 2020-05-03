@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
 using VueCliMiddleware;
-using Microsoft.EntityFrameworkCore;
-using BuildingAutomation.Controllers;
 
 namespace BuildingAutomation
 {
@@ -71,7 +65,8 @@ namespace BuildingAutomation
                 {
                     spa.UseVueCli(npmScript: "serve");
                 }
-
+                // aumenta o tempo limite
+                spa.Options.StartupTimeout = TimeSpan.FromSeconds(60);
             });
         }
     }

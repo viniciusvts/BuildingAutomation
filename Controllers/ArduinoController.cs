@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BuildingAutomation.Models;
-using Microsoft.AspNetCore.Http;
+﻿using BuildingAutomation.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 // conexão serial
 using System.IO.Ports;
 
