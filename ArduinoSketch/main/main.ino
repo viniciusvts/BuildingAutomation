@@ -12,7 +12,7 @@ const int sensorTemperatura = A4;
 
 //setar os atuadores
 const int atuadorRele = 6;
-const int atuadorControleInfravermelho = 4;//porta padrao do IRsend
+const int atuadorControleInfravermelho = 3;//porta padrao do IRsend
 IRsend irSend;
 
 //constantes utilizadas
@@ -84,6 +84,7 @@ void enviarDadosParaSerial(){
     Serial.print(statusSensorPIR);
     Serial.print("&");
     Serial.print(statusSensorTemperatura);
+    Serial.print("\n");
  }
 
 //FIM DAS FUNÇÔES
