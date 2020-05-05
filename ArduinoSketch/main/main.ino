@@ -32,27 +32,46 @@ char serialReturn;
 int statusSensorPIR = 0;
 int statusSensorTemperatura = 0;
 int statusSensorTemperaturaUltimoValorLido = 0;
+int statusRele = 0;
 const unsigned long intervaloDeVerificacaoDoArCondicionado = 60000;
 unsigned long millisUltimoValorLido = 0;
 
 //funcões utilizadas no programa
 
 void ligarEletronicos(){
-  digitalWrite( atuadorRele, HIGH );
-  for( int i =0 ; i <3 ; i++){
-    irSend.sendRC5( comandoDeLigarArCondicionado, bitsComandoIR);
-    delay(50);
-  }
+  ligarReles();
+  ligarIR();
   jaEnviouLigar = true;
 }
 
 void desligarEletronicos(){
-  digitalWrite( atuadorRele, LOW );
+  desligarReles();
+  desligarIR();
+  jaEnviouDesligar = true;
+}
+
+void ligarReles(){
+  statusRele = HIGH;
+  digitalWrite( atuadorRele, statusRele );
+}
+
+void desligarReles(){
+  statusRele = LOW;
+  digitalWrite( atuadorRele, statusRele );
+}
+
+void ligarIR(){
+  for( int i =0 ; i <3 ; i++){
+    irSend.sendRC5( comandoDeLigarArCondicionado, bitsComandoIR);
+    delay(50);
+  }
+}
+
+void desligarIR(){
   for( int i =0 ; i <3 ; i++){
     irSend.sendRC5(comandoDeDesligarArCondicionado, bitsComandoIR);
     delay(50);
   }
-  jaEnviouDesligar = true;
 }
 
 char receberDadosSerial(){
@@ -81,6 +100,8 @@ bool isPresencaOn(){
 }
 
 void enviarDadosParaSerial(){
+    Serial.print(statusRele);
+    Serial.print("&");
     Serial.print(statusSensorPIR);
     Serial.print("&");
     Serial.print(statusSensorTemperatura);
@@ -121,7 +142,7 @@ void loop() {
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //salvo temper atual
             millisUltimoValorLido = millis();
         }else{
-            digitalWrite( atuadorRele, HIGH);
+            ligarReles();
         }
     }else if( serialReturn == comandocharParaDesligarTudo ){
         //se no loop anterior recebi comandocharParaLigarTudo
@@ -139,7 +160,7 @@ void loop() {
             statusSensorTemperaturaUltimoValorLido = statusSensorTemperatura; //slvo temper atual
             millisUltimoValorLido = millis();
         }else{
-            digitalWrite( atuadorRele, LOW);
+            desligarReles();
         }
     }
     if( jaEnviouLigar ){
