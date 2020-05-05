@@ -63,14 +63,16 @@ namespace BuildingAutomation.Controllers
             catch { }
             String[] data = serialData.Split('&');
             // defino uns valores padrões em caso de erro
+            bool _status = false;
             bool _pre = false;
             int _temp = -1;
-            if (data.Length == 2)
+            if (data.Length == 3)
             {
-                _pre = data[0] == "1";
-                _temp = Int32.Parse(data[1]);
+                _status = data[0] == "1";
+                _pre = data[1] == "1";
+                _temp = Int32.Parse(data[2]);
             }
-            return new Arduino(_pre, _temp);
+            return new Arduino(_status, _pre, _temp);
         }
 
         /**
