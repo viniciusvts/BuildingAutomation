@@ -1,0 +1,13 @@
+﻿#app {
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+@import "./cards.scss";
+@import "./forms.scss";
+@import "./mixins.scss";
+@import "./titleParagrafLists.scss";
+@import "./bootstrap/bootstrap-grid.scss";

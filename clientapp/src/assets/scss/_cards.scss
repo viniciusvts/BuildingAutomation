@@ -1,0 +1,22 @@
+.card{
+    background-color: whitesmoke;
+    padding: 50px 0;
+    margin: 50px;
+    button{
+        font-size: 20px;
+        text-align: center;
+        color: black;
+        background-color: greenyellow;
+        padding: 10px;
+        border: solid 2px #C1C2AE;
+        cursor: pointer;
+        &.active{
+            color: white;
+            background-color: red;
+        }
+        &[disabled]{
+            background-color: whitesmoke;
+            cursor: auto;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+@mixin statusCircle ($width) {
+    width: $width;
+    height: $width;
+    background: red;
+    -webkit-border-radius: $width/2;
+       -moz-border-radius: $width/2;
+            border-radius: $width/2;
+}

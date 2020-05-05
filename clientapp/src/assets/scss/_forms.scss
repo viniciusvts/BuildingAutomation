@@ -1,0 +1,16 @@
+.card{
+    form{
+        display: grid;
+        input{
+            width: 70%;
+            height: 50px;
+            margin: 0 auto 10px;
+            border: none;
+            border-bottom: solid 3px #C1C2AE;
+        }
+        button{
+            width: 200px;
+            margin: 0 auto 17px;
+        }
+    }
+}
