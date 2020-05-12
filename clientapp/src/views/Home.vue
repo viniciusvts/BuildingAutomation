@@ -72,7 +72,7 @@ export default {
     }
   },
   mounted() {
-    // this.getInterval = setInterval(this.getArduinoData, 2000);
+    this.getInterval = setInterval(this.getArduinoData, 2000);
   },
   beforeDestroy: () =>{
     if(this.getInterval != null){
@@ -113,10 +113,7 @@ export default {
         headers: header
       })
       .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        console.log(json);
+        if(response.ok) alert('Salvo');
       });
     }
   },
